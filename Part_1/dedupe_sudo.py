@@ -27,7 +27,11 @@ def  adjust_position(line):
         
     return 'correct position as a string'
 
-    
+# Create set of valid UMIs
+valid_UMIs = set()
+with open("STL96.txt", 'r') as umi:
+    for line in umi:
+        valid_UMIs.add(line)
     
 # Sort sam file using samtools sort -o sorted_data.sam data.sam 
 file = sorted_data.sam    
@@ -54,6 +58,12 @@ with open(file, 'r') as f:
         
         # Get UMI
         UMI = line.split('\t')[1].split(':')[-1]
+        # Check valid:
+        if UMI in valid_UMIs:
+            continue
+        else:
+            trash the line
+        
         # Get strand
         strand = check_bitwise(line.split('\t')[3])
         
