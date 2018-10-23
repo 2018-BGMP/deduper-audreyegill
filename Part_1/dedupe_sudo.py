@@ -8,18 +8,20 @@ def check_bitwise(flag):
     return strand
     
 def  adjust_position(line):
-    '''Return the corrected starting position of a read'''
+    '''Return the corrected starting position of a read as a string'''
     CIGAR=line.split('\t')[6]
     if check_bitwise(line.split('\t')[3])=='+':
         
         # only adjust if first letter isn't an M
+            # so position = 10 and CIGAR = 5S95M would return correct_position = '5'
         # otherwise correct_position = position
-        evaluate CIGAR
         
     elif check_bitwise(line.split('\t')[3])=='-':
     
-        # this gets more specific
-        # will need to evaluate more
+        # different rules for different starting letters; that is...
+            # position = 50	and CIGAR = 20M10S returns correct_position = '80'
+            # position = 55 and CIGAR = 5S25M returns correct_position = '80'
+        
     else: 
         # probably return an error just bc
         
@@ -31,7 +33,7 @@ def  adjust_position(line):
 file = sorted_data.sam    
 with open(file, 'r') as f:
     if line startswith '@':
-        continue
+        go to the next line
     rname_prev = ''
     ID_set = set()
     for line in f:
@@ -43,17 +45,17 @@ with open(file, 'r') as f:
         else:
             reset ID_set
         
-        # may need to change indents/nesting following this conditional 
+        # need to change indents/nesting for the above conditionals
         # will worry about later
 
-        # ID strand
-        strand = check_bitwise(line.split('\t')[3])
         
         # Use adjust_position function
         pos_corrected = adjust_position(line)
         
         # Get UMI
         UMI = line.split('\t')[1].split(':')[-1]
+        # Get strand
+        strand = check_bitwise(line.split('\t')[3])
         
         # create ID
         ID = rname+pos_corrected+strand+UMI
